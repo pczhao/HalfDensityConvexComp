@@ -5,7 +5,7 @@
 % \geometry{landscape} % rotated page geometry
 
 %  POSSIBLY USEFULE PACKAGES
-%\usepackage{graphicx}
+\usepackage{graphicx}
 %\usepackage{tensor}
 %\usepackage{todonotes}
 
@@ -43,14 +43,27 @@
 Let $(X,\Sigma, \mu)$ be a finite measurable space and consider the following psuedo-metric on borel sets.
 
 \begin{align*}
-	d(\sigma_{1}, \sigma_{2}) = \mu \left\{ (\sigma_{1} \cap \sigma_{2}^{c} ) \cup  (\sigma_{1}^{c} \cap \sigma_{2}) \right\}.
+	d(\sigma_{1}, \sigma_{2}) = \mu( \sigma_{1} \Delta \sigma_{2}) \equiv \mu \left\{ (\sigma_{1} \cap \sigma_{2}^{c} ) \cup  (\sigma_{1}^{c} \cap \sigma_{2}) \right\}.
 \end{align*}
 
-We might care about this distance in our algorithms because if $X_{0}$ is the exact BRS and $X_{0,N}$ is our numerically computed BRS
-then a bound of the form ``$d( X_{0} , X_{0,N}) \leq \delta$'' holds if and only if $X_{0} = X_{0,N} \cup Y_{N} - Z_{N}$ for some $Y_{N},Z_{N} \in \Sigma$ with $\mu(Y_{N} \cup Z_{N}) \leq \delta$.
-Moreover, if $X_{0,N}$ is an inner approximation the bound would imply that $X_{0} = X_{0,N} \cup Y_{N}$ for some $Y_{N} \in \Sigma$ with $\mu(Y_{N}) \leq \delta$.
+Modulo sets of measure zero, $d$ is a metric.  In words, $d$ measures the mass of all points where $\sigma_{1}$ and $\sigma_{2}$.
+This is depicted in figure \ref{fig:symmetric difference}.
 
-\begin{prop}
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.5\textwidth]{./images/symmetric_difference}
+	\caption{If $\sigma_{1}$ and $\sigma_{2}$ denote the interiors of the blue and red circles respectively,
+	then $\sigma_{1} \Delta \sigma_{2}$ is the grey region.}
+	\label{fig:symmetric difference}
+\end{figure}
+
+Bounding this distance can be interpreted as follows: if $d(\sigma_{1} , \sigma_{2} )$ is bounded by $\epsilon$ then there exists sets $\sigma_{+}, \sigma_{-}$ of total measure $\mu( \sigma_{+} \cup \sigma_{-}) \leq \epsilon$ such that $\sigma_{1} = \sigma_{2} \cup \sigma_{+} - \sigma_{-}$.
+
+%We might care about this distance in our algorithms because if $X_{0}$ is the exact BRS and $X_{0,N}$ is our numerically computed BRS
+%then a bound of the form ``$d( X_{0} , X_{0,N}) \leq \delta$'' holds if and only if $X_{0}$ is equivalent in measure to $(X_{0,N} \cap Y_{N}) \cup Z_{N}$ for some $Y_{N},Z_{N} \in \Sigma$ with $\mu(Y_{N} \cup Z_{N}) \leq \delta$.
+%Moreover, if $X_{0,N}$ is an inner approximation the bound would imply that $X_{0} = X_{0,N} \cup Z_{N}$ for some $Z_{N} \in \Sigma$ with $\mu(Z_{N}) \leq \delta$.
+
+\begin{prop} \label{prop:sublevel sets}
 	If $f +\epsilon = g$ for $f,g \in C^{0}(X)$ then $d( \{ f \geq 0 \}  , \{ g \geq 0 \} ) \leq \mu\{ -\epsilon^{*} \leq g < \epsilon^{*} \}$ where $\epsilon^{*} = \sup_{x} | \epsilon(x) |$.
 \end{prop}
 
@@ -67,9 +80,24 @@ Moreover, if $X_{0,N}$ is an inner approximation the bound would imply that $X_{
   \end{align*}
   \end{proof}
 
-\begin{cor}
-	Let $f = g + \epsilon$ and assume $\{ f \geq \} \subset \{ g \geq 0 \}$.
-\end{cor}
+\subsection{Relevance}
+We are considering an infinite dimensional problem
+\begin{align*}
+	\sup \int \psi_{0} dx
+\end{align*}
+for $\psi_{0} \in L^{2}(X)$ subject to a constraint of the form $A[\psi_{0}] \leq b$.
+Let $\psi_{0}^{*}$ denote the solution of this optimization problem.
+We then consider finite dimensional approximations by restricting $\psi_{0}$ to be a in a subspace $\psi_{0} \in V_{N}$.
+Let $\psi^{*}_{0,N}$ denote the solution to the finite-dimensional truncated problem.
+It is possible that $\psi_{0}^{*} = \psi^{*}_{0,N} + \epsilon^{*}_{N}$ where $\epsilon_{N}^{*}$ is small.
+In particular, if we are smart we can bound $\epsilon_{N}^{*}$ with some quantity $\bar{\epsilon}(N , A)$.
+After computing $\psi_{0,N}^{*}$ and computing $X_{0,N} = \{ x \mid \psi_{0,N}^{*}(x) \geq 0 \}$.
+While we do not know the set $X_{0} = \{ x \mid \psi_{0}^{*}(x) \geq 0 \}$ we can at least bound $d( X_{0,N} , X_{0})$
+using $\bar{\epsilon}(N,A)$ and Proposition \ref{prop:sublevel sets}.
+
+Proposition \ref{prop:sublevel sets} only gives us a bound \emph{after} we compute $\psi_{0,N}$.
+In words, this bound would tell us how much extra points need to be added or subtracted from $X_{0,N}$ in order to matchup 
+with the exact solution $X_{0}$.
 
 \bibliographystyle{amsalpha}
 \bibliography{hoj.bib}
