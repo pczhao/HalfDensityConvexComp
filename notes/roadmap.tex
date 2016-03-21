@@ -1,0 +1,93 @@
+\documentclass[12pt]{amsart}
+\usepackage{amsmath,amssymb}
+\usepackage{geometry} % see geometry.pdf on how to lay out the page. There's lots.
+\geometry{a4paper} % or letter or a5paper or ... etc
+% \geometry{landscape} % rotated page geometry
+
+%  POSSIBLY USEFULE PACKAGES
+%\usepackage{graphicx}
+%\usepackage{tensor}
+%\usepackage{todonotes}
+
+%  NEW COMMANDS
+\newcommand{\pder}[2]{\ensuremath{\frac{ \partial #1}{\partial #2}}}
+\newcommand{\ppder}[3]{\ensuremath{\frac{\partial^2 #1}{\partial
+      #2 \partial #3} } }
+
+%  NEW THEOREM ENVIRONMENTS
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{defn}[thm]{Definition}
+
+
+%  MATH OPERATORS
+\DeclareMathOperator{\Diff}{Diff}
+\DeclareMathOperator{\GL}{GL}
+\DeclareMathOperator{\SO}{SO}
+\DeclareMathOperator{\ad}{ad}
+\DeclareMathOperator{\Ad}{Ad}
+
+%  TITLE, AUTHOR, DATE
+\title{Roadmap}
+\author{a pc-hoj-rambo joint}
+\date{\today}
+
+
+\begin{document}
+
+\maketitle
+
+\section{Step 1:  The full infinite dimensional LP}
+Consider the optimization problem
+\begin{align*}
+	\sup \int_X v_0 dx
+\end{align*}
+subject to the constraints
+\begin{align*}
+	\mathcal{L}v = 0 \text{ on } X \times [0,T]\\
+	v_T \leq 0 \quad \text{ on } X_T^c \\
+	v_0 \leq 1 \quad \text{ on } X.
+\end{align*}
+We must first show that the solution to this problem tells us something about the BRS, $X_0$.  For example, perhaps $v_0$ is an indicator function on $X_0$.
+
+\section{Step 2: The truncated LP with support constraints}
+Let $V_N$ be a finite dimensional approximation space for $L^2( X \times [0,T])$.
+Let $\pi_N$ denote the orthogonal projection from $L^2$ to $V_N$
+and consider the optimization problem
+\begin{align*}
+	\sup \int_X v_{0,N} dx
+\end{align*}
+subject to the constraints
+\begin{align*}
+	v_N \in V_N
+	\pi_N ( \mathcal{L} v_N ) = 0 \\
+	v_{N,T} \leq 0 \quad \text{ on } X_T \\
+	v_{N,0} \leq 1 \quad \text{ on } X.
+\end{align*}
+We must find a bound, $\epsilon_1$, for $\| v_0 - v_{N,0} \|_2$
+
+\section{Step 3: Collocation contraints}
+Let $X_{nodes} \subset X$ be a set of collocation nodes.
+Consider the optimization problem
+\begin{align*}
+	\inf \int_X v_{NC,0} dx
+\end{align*}
+subject to the constraints
+\begin{align*}
+	v_{NC} \in V_N
+	\pi_N ( \mathcal{L} v_{NC} ) = 0 \\
+	v_{NC,T} \geq 1 \quad \text{ on } X_T \cap X_{nodes} \\
+	v_{NC,0} \geq 0 \quad \text{ on } X_{nodes}.
+\end{align*}
+We must find a bound $\epsilon_2$ for $\| v_{N,0} - v_{NC,0} \|_2$.
+
+\section{Step 4}
+We must interpret the bound between $v_0$ and $v_{0,NC}$.
+If $v_0$ is an indicator function, perhaps it would make sense to bound $\| v_0^2 - v^2_{0,NC} \|_{L^1}$.
+We could interpret this as a mass discrepency.
+
+\bibliographystyle{amsalpha}
+\bibliography{hoj.bib}
+\end{document}
